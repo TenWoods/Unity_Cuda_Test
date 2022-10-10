@@ -1,30 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 using System.Runtime.InteropServices;
+using UnityEngine.Rendering;
 
 public class CudaInterop : MonoBehaviour
 {
-    [DllImport("Cuda_Interop.dll", EntryPoint = "Test")]
-    static extern int Test(int id);
-    
+    [DllImport("Cuda_Interop.dll", EntryPoint = "SendTextureToCuda")]
+    static extern void SendTextureToCuda(int texture_id, int width, int height);
+    [DllImport("Cuda_Interop.dll", EntryPoint = "Dispose")]
+    static extern void Dispose();
+
     [SerializeField]
     private int send;
-
-    IntPtr handle;
+    private RenderTexture rt;
+    [SerializeField]
+    private Texture2D colorTexture;
+    private Camera _camera;
 
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        int message = Test(send);
-        Debug.Log(message);
+        _camera = GetComponent<Camera>();
+        rt = _camera.targetTexture;
+        colorTexture = new Texture2D(rt.width, rt.height);
+    }
+    private void OnEnable() 
+    {
+        RenderPipelineManager.endCameraRendering += PostRender;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable() 
     {
-        
+        RenderPipelineManager.endCameraRendering -= PostRender;
+        Dispose();
+    }
+
+    private void PostRender(ScriptableRenderContext context, Camera camera)
+    {
+        OnPostRender();
+    }
+
+    private void OnPostRender() 
+    {
+        Debug.Log(colorTexture.GetNativeTexturePtr());
+        RenderTexture.active = rt;
+        colorTexture.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
+        colorTexture.Apply();
+        SendTextureToCuda((int)colorTexture.GetNativeTexturePtr(), colorTexture.width, colorTexture.height);
+        //Debug.Log(colorTexture.GetNativeTexturePtr());
     }
 }

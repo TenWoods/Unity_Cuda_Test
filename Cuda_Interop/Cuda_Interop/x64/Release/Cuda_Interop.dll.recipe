@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\Workplace\unity_projects\Unity_Cuda_Test\Cuda_Interop\x64\Release\Cuda_Interop.dll</FullPath>
+      <FullPath>D:\Workplace\unity_projects\Unity_Cuda_Test\Assets\Plugins\Cuda_Interop.dll</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

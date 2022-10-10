@@ -26,6 +26,7 @@ extern "C"
 {
 	DllExport int Test(int input);
     DllExport void SendTextureToCuda(int texture_id, int width, int height);
+    DllExport void Dispose();
 }
 
 void readTexture(int texture_id, int width, int height);
