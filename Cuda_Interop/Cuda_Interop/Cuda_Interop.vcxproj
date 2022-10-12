@@ -85,6 +85,23 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cuda_interop.h" />
+    <ClInclude Include="nvcomp\nvcomp.h" />
+    <ClInclude Include="nvcomp\nvcomp.hpp" />
+    <ClInclude Include="nvcomp\nvcomp\ans.h" />
+    <ClInclude Include="nvcomp\nvcomp\ans.hpp" />
+    <ClInclude Include="nvcomp\nvcomp\bitcomp.h" />
+    <ClInclude Include="nvcomp\nvcomp\bitcomp.hpp" />
+    <ClInclude Include="nvcomp\nvcomp\cascaded.h" />
+    <ClInclude Include="nvcomp\nvcomp\cascaded.hpp" />
+    <ClInclude Include="nvcomp\nvcomp\gdeflate.h" />
+    <ClInclude Include="nvcomp\nvcomp\gdeflate.hpp" />
+    <ClInclude Include="nvcomp\nvcomp\lz4.h" />
+    <ClInclude Include="nvcomp\nvcomp\lz4.hpp" />
+    <ClInclude Include="nvcomp\nvcomp\nvcompManager.hpp" />
+    <ClInclude Include="nvcomp\nvcomp\nvcompManagerFactory.hpp" />
+    <ClInclude Include="nvcomp\nvcomp\shared_types.h" />
+    <ClInclude Include="nvcomp\nvcomp\snappy.h" />
+    <ClInclude Include="nvcomp\nvcomp\snappy.hpp" />
     <ClInclude Include="PluginAPI\IUnityEventQueue.h" />
     <ClInclude Include="PluginAPI\IUnityGraphics.h" />
     <ClInclude Include="PluginAPI\IUnityGraphicsD3D11.h" />

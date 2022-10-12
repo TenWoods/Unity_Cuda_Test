@@ -1,14 +1,14 @@
 #pragma once
-#include "PluginAPI\IUnityGraphics.h"
-
 #ifdef _WIN32
 #include <Windows.h>
 #endif
 
+#include <fstream>
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 #include "cuda_gl_interop.h"
-#include <fstream>
+#include "PluginAPI\IUnityGraphics.h"
+#include "nvcomp\nvcomp.h"
 
 std::ofstream log_file;  //Debug: error output
 
@@ -28,17 +28,26 @@ public:
         resource = NULL;
         data_pointer = NULL;
         array = NULL;
+        isFirstDebug = true;
         data_length = width * height * sizeof(uchar4);
     }
 
     void registerTexture();
-    void mapCudaArray();
+    void mapResource();
     void copyCudaArray();
+    void unmapResource();
+    void unregisterResource();
+
+private: 
+    bool isFirstDebug;
+    void output_for_debug();
 
     //data structure for compression
     //TODO
 };
 GraphicsResource* graphicsResource = NULL;
+
+
 
 //Called by C#
 extern "C"

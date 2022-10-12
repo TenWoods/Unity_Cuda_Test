@@ -288,5 +288,7 @@ C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\include\vector_function
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\include\vector_functions.hpp
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\include\vector_types.h
 C:\WorkPlace\Unity\Unity_Cuda_Test\Cuda_Interop\Cuda_Interop\cuda_interop.h
+C:\WorkPlace\Unity\Unity_Cuda_Test\Cuda_Interop\Cuda_Interop\nvcomp\nvcomp.h
+C:\WorkPlace\Unity\Unity_Cuda_Test\Cuda_Interop\Cuda_Interop\nvcomp\nvcomp\shared_types.h
 C:\WorkPlace\Unity\Unity_Cuda_Test\Cuda_Interop\Cuda_Interop\PluginAPI\IUnityGraphics.h
 C:\WorkPlace\Unity\Unity_Cuda_Test\Cuda_Interop\Cuda_Interop\PluginAPI\IUnityInterface.h
