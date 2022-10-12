@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CudaCompile Include="cuda_interop.cu" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cuda_interop.h" />
+    <ClInclude Include="PluginAPI\IUnityEventQueue.h" />
+    <ClInclude Include="PluginAPI\IUnityGraphics.h" />
+    <ClInclude Include="PluginAPI\IUnityGraphicsD3D11.h" />
+    <ClInclude Include="PluginAPI\IUnityGraphicsD3D12.h" />
+    <ClInclude Include="PluginAPI\IUnityGraphicsMetal.h" />
+    <ClInclude Include="PluginAPI\IUnityGraphicsVulkan.h" />
+    <ClInclude Include="PluginAPI\IUnityInterface.h" />
+    <ClInclude Include="PluginAPI\IUnityLog.h" />
+    <ClInclude Include="PluginAPI\IUnityProfiler.h" />
+    <ClInclude Include="PluginAPI\IUnityProfilerCallbacks.h" />
+    <ClInclude Include="PluginAPI\IUnityRenderingExtensions.h" />
+    <ClInclude Include="PluginAPI\IUnityShaderCompilerAccess.h" />
+  </ItemGroup>
+</Project>

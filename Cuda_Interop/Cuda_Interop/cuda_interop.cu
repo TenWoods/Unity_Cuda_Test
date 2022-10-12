@@ -1,48 +1,43 @@
 ﻿#include "cuda_interop.h"
 #include <iostream>
-#include <fstream>
 
-DllExport int Test(int input)
+UNITY_INTERFACE_EXPORT void SendTextureIDToCuda(int texture_id, int width, int height)
 {
-	return input;
-}
-
-GraphicsResource* getResource(int texture_id)
-{
-	if (graphicsResources.find(texture_id) == graphicsResources.end())
+	if (graphicsResource == NULL)
 	{
-		GraphicsResource* resource = new GraphicsResource();
-		resource->id = texture_id;
-		cudaError err;
-		err = cudaGraphicsGLRegisterImage(&resource->resource, texture_id, GL_TEXTURE_2D, cudaGraphicsRegisterFlagsNone);
-		if (err != cudaSuccess)
-		{
-			std::ofstream log_file;
-			log_file.open("log.txt");
-			log_file << cudaGetErrorName(err) << ': ' << cudaGetErrorString(err) << std::endl;
-		}
-		graphicsResources[texture_id] = resource;
+		graphicsResource = new GraphicsResource(texture_id, width, height);
 	}
-	return graphicsResources[texture_id];
 }
 
-void readTexture(int texture_id, int width, int height)
+void GraphicsResource::registerTexture()
 {
-	GraphicsResource* resource = getResource(texture_id);
-	resource->width = width;
-	resource->height = height;
+	CHECK_ERROR(cudaGraphicsGLRegisterImage(&resource, id, GL_TEXTURE_2D, cudaGraphicsMapFlagsNone));
 }
 
-DllExport void SendTextureToCuda(int texture_id, int width, int height)
+void GraphicsResource::mapCudaArray()
 {
-	readTexture(texture_id, width, height);
+	CHECK_ERROR(cudaGraphicsSubResourceGetMappedArray(&array, resource, 0, 0));
 }
 
-DllExport void Dispose()
+void GraphicsResource::copyCudaArray()
 {
-	for (std::pair<int, GraphicsResource*> p : graphicsResources)
-	{
-		cudaGraphicsUnmapResources(1, &p.second->resource, 0);
-	}
+
+}
+
+static void UNITY_INTERFACE_API OnRenderEvent(int eventID)
+{
+	graphicsResource->registerTexture();
+	graphicsResource->mapCudaArray();
+}
+
+UnityRenderingEvent UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetRenderEventFunc()
+{
+	return OnRenderEvent;
+}
+
+UNITY_INTERFACE_EXPORT void Dispose()
+{
+	cudaGraphicsUnmapResources(1, &graphicsResource->resource, 0);
+	log_file.close();
 }
 

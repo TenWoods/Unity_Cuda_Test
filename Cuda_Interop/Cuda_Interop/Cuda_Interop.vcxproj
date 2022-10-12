@@ -17,7 +17,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
@@ -85,6 +85,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cuda_interop.h" />
+    <ClInclude Include="PluginAPI\IUnityEventQueue.h" />
+    <ClInclude Include="PluginAPI\IUnityGraphics.h" />
+    <ClInclude Include="PluginAPI\IUnityGraphicsD3D11.h" />
+    <ClInclude Include="PluginAPI\IUnityGraphicsD3D12.h" />
+    <ClInclude Include="PluginAPI\IUnityGraphicsMetal.h" />
+    <ClInclude Include="PluginAPI\IUnityGraphicsVulkan.h" />
+    <ClInclude Include="PluginAPI\IUnityInterface.h" />
+    <ClInclude Include="PluginAPI\IUnityLog.h" />
+    <ClInclude Include="PluginAPI\IUnityProfiler.h" />
+    <ClInclude Include="PluginAPI\IUnityProfilerCallbacks.h" />
+    <ClInclude Include="PluginAPI\IUnityRenderingExtensions.h" />
+    <ClInclude Include="PluginAPI\IUnityShaderCompilerAccess.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
