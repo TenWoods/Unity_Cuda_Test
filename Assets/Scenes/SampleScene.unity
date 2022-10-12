@@ -785,7 +785,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RenderShadows: 1
-  m_RequiresDepthTextureOption: 2
+  m_RequiresDepthTextureOption: 1
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
@@ -902,8 +902,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eefc63f3c7e117d48b6fc41bac6e3289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  send: 0
   colorTexture: {fileID: 0}
+  depthTexture: {fileID: 0}
+  depth_mat: {fileID: 2100000, guid: d89b967fb35dabb4b8d00d91c35f1855, type: 2}
 --- !u!114 &2093014991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -917,7 +918,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RenderShadows: 1
-  m_RequiresDepthTextureOption: 2
+  m_RequiresDepthTextureOption: 1
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
