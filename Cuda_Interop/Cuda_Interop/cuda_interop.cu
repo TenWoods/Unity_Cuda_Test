@@ -25,7 +25,7 @@ void GraphicsResource::copyCudaArray()
 	CHECK_ERROR(cudaGraphicsSubResourceGetMappedArray(&array, resource, 0, 0));
 	CHECK_ERROR(cudaMemcpy2DFromArray(data_pointer, width * sizeof(uchar4), array, 0, 0, width * sizeof(uchar4), height, cudaMemcpyDeviceToDevice));
 	//Debug
-	//output_for_debug();
+	output_for_debug();
 }
 
 void GraphicsResource::unmapResource()

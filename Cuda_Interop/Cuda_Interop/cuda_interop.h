@@ -7,8 +7,8 @@
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 #include "cuda_gl_interop.h"
-#include "PluginAPI\IUnityGraphics.h"
-#include "nvcomp\nvcomp.h"
+#include "PluginAPI/IUnityGraphics.h"
+#include "nvcomp/nvcomp.h"
 
 std::ofstream log_file;  //Debug: error output
 

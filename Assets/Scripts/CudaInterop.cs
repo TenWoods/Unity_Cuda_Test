@@ -5,11 +5,20 @@ using UnityEngine.Rendering;
 
 public class CudaInterop : MonoBehaviour
 {
-    [DllImport("Cuda_Interop", EntryPoint = "SendTextureIDToCuda")]
+    #if UNITY_STANDALONE_LINUX
+    [DllImport("libCuda_Interop", EntryPoint = "SendTextureIDToCuda")]
+    #elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+    #endif
     private static extern void SendTextureIDToCuda(int texture_id, int width, int height);
-    [DllImport("Cuda_Interop", EntryPoint = "Dispose")]
+    #if UNITY_STANDALONE_LINUX
+    [DllImport("libCuda_Interop", EntryPoint = "Dispose")]
+    #elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+    #endif
     private static extern void Dispose();
-    [DllImport("Cuda_Interop")]
+    #if UNITY_STANDALONE_LINUX
+    [DllImport("libCuda_Interop")]
+    #elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+    #endif
     private static extern IntPtr GetRenderEventFunc();
 
     private RenderTexture rt;
@@ -21,6 +30,11 @@ public class CudaInterop : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        #if UNITY_STANDALONE_LINUX
+        Debug.Log("Linux!");
+        #elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+        Debug.Log("Windows!");
+        #endif
         _camera = GetComponent<Camera>();
         rt = _camera.targetTexture;
         colorTexture = new Texture2D(rt.width, rt.height);

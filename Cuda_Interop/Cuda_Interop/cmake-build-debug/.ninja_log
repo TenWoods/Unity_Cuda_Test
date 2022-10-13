@@ -1,0 +1,7 @@
+# ninja log v5
+0	814	1665654726888927912	CMakeFiles/Cuda_Interop.dir/cuda_interop.cu.o	1418bef32cf2a15
+815	838	1665654726918927906	CMakeFiles/Cuda_Interop.dir/cmake_device_link.o	11d133bd12953fef
+838	881	1665654726958927898	libCuda_Interop.so	248a6aa6360b5c2
+1	817	1665654751768922766	CMakeFiles/Cuda_Interop.dir/cuda_interop.cu.o	1418bef32cf2a15
+817	840	1665654751788922762	CMakeFiles/Cuda_Interop.dir/cmake_device_link.o	11d133bd12953fef
+840	884	1665654751828922753	libCuda_Interop.so	248a6aa6360b5c2
