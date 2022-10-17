@@ -6,20 +6,20 @@ using UnityEngine.Rendering;
 public class CudaInterop : MonoBehaviour
 {
     #if UNITY_STANDALONE_LINUX
-    [DllImport("libCuda_Interop", EntryPoint = "SendTextureIDToCuda")]
+    [DllImport("libCuda_Interop.so", EntryPoint = "SendTextureIDToCuda")]
     #elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
     //Call C++
     [DllImport("Cuda_Interop", EntryPoint = "SendTextureIDToCuda")]
     #endif   
     private static extern void SendTextureIDToCuda(int texture_id, int width, int height);
     #if UNITY_STANDALONE_LINUX
-    [DllImport("libCuda_Interop", EntryPoint = "Dispose")]
+    [DllImport("libCuda_Interop.so", EntryPoint = "Dispose")]
     #elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
     [DllImport("Cuda_Interop", EntryPoint = "Dispose")]
     #endif
     private static extern void Dispose();
     #if UNITY_STANDALONE_LINUX
-    [DllImport("libCuda_Interop")]
+    [DllImport("libCuda_Interop.so")]
     #elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
     [DllImport("Cuda_Interop")]
     #endif
