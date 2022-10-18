@@ -270,7 +270,8 @@ CMakeFiles/Cuda_Interop.dir/cuda_interop.cu.o: ../cuda_interop.cu \
   ../PluginAPI/IUnityInterface.h \
   ../nvcomp/nvcomp.h \
   ../nvcomp/nvcomp/shared_types.h \
-  /usr/include/c++/10/iostream
+  /usr/include/c++/10/iostream \
+  ../nvcomp/nvcomp/cascaded.h
 
 
 /usr/include/c++/10/iostream:
@@ -788,6 +789,8 @@ CMakeFiles/Cuda_Interop.dir/cuda_interop.cu.o: ../cuda_interop.cu \
 /usr/include/c++/10/debug/assertions.h:
 
 /usr/include/x86_64-linux-gnu/bits/locale.h:
+
+../nvcomp/nvcomp/cascaded.h:
 
 /usr/include/c++/10/bits/ptr_traits.h:
 

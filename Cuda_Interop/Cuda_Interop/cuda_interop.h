@@ -4,6 +4,7 @@
 #endif
 
 #include <fstream>
+#include <string>
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 #include "cuda_gl_interop.h"
@@ -22,6 +23,10 @@ public:
     size_t height;                        //texture height
     size_t data_length;                   //texture data length
     void* data_pointer;                   //texture data pointer
+    void* temp_ptr;                       //temp pointer for nvcomp
+    size_t temp_bytes;                    //temp data size
+    void** out_ptr;                        //out pointer for nvcomp
+    size_t* out_bytes;                     //out data size
     
     GraphicsResource(int id, size_t width, size_t height) : id(id), width(width), height(height)
     {
@@ -38,9 +43,12 @@ public:
     void unmapResource();
     void unregisterResource();
 
+    void compress();
+
 private: 
     bool isFirstDebug;
     void output_for_debug();
+    void initialize_nvcomp();
 
     //data structure for compression
     //TODO
@@ -59,13 +67,50 @@ extern "C"
 
 static void UNITY_INTERFACE_API OnRenderEvent(int eventID);
 
-void CHECK_ERROR(cudaError_t err)
+std::string nvcompGetStatusString(nvcompStatus_t status)
+{
+    std::string status_string;
+    switch (status)
+    {
+        case nvcompErrorInvalidValue:
+            status_string = "invalid value";
+            break;
+        case nvcompErrorNotSupported:
+            status_string = "not supported";
+            break;
+        case nvcompErrorCudaError:
+            status_string = "cuda error";
+            break;
+        case nvcompErrorInternal:
+            status_string = "internal";
+            break;
+        case nvcompErrorCannotDecompress:
+            status_string = "can not decompress";
+            break;
+        default:
+            status_string = "success";
+            break;
+    }
+    return status_string;
+}
+
+void CHECK_ERROR(cudaError_t err, std::string filename, const int line)
 {
     if (!log_file.is_open())
         log_file.open("error_log.txt");
     if (err != cudaSuccess)
     {
-        log_file << cudaGetErrorString(err) << std::endl;
+        log_file << '[' << cudaGetErrorString(err) << "] in " << filename << ", line" << line << std::endl;
+    }
+}
+
+void CHECK_NVCOMP(nvcompStatus_t status, std::string filename, const int line)
+{
+    if (!log_file.is_open())
+        log_file.open("error_log.txt");
+    if (status != nvcompSuccess)
+    {
+        log_file << '[' << nvcompGetStatusString(status) << "] in " << filename << ", line" << line << std::endl;
     }
 }
 
