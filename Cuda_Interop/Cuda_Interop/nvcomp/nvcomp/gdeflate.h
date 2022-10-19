@@ -154,6 +154,25 @@ nvcompStatus_t nvcompBatchedGdeflateDecompressGetTempSize(
     size_t* temp_bytes);
 
 /**
+ * @brief Get the amount of temp space required on the GPU for decompression.
+ *
+ * @param num_chunks The number of items in the batch.
+ * @param max_uncompressed_chunk_bytes The size of the largest chunk in bytes
+ * when uncompressed.
+ * @param temp_bytes The amount of temporary GPU space that will be required to
+ * decompress.
+ * @param max_uncompressed_total_size  The total decompressed size of all the chunks. 
+ * Unused in gdeflate.
+ *
+ * @return nvcompSuccess if successful, and an error code otherwise.
+ */
+nvcompStatus_t nvcompBatchedGdeflateDecompressGetTempSizeEx(
+    size_t num_chunks,
+    size_t max_uncompressed_chunk_bytes,
+    size_t* temp_bytes,
+    size_t max_uncompressed_total_size );
+
+/**
  * @brief Perform decompression asynchronously. All pointers must be GPU
  * accessible. In the case where a chunk of compressed data is not a valid GDeflate
  * stream, 0 will be written for the size of the invalid chunk and
@@ -214,7 +233,6 @@ nvcompStatus_t nvcompBatchedGdeflateGetDecompressSizeAsync(
     size_t* device_uncompressed_bytes,
     size_t batch_size,
     cudaStream_t stream);
-
 
 #ifdef __cplusplus
 }

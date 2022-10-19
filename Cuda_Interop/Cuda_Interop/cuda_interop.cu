@@ -113,7 +113,7 @@ static void UNITY_INTERFACE_API OnRenderEvent(int eventID)
 	graphicsResource->registerTexture();
 	graphicsResource->mapResource();
 	graphicsResource->copyCudaArray();
-    graphicsResource->compress();
+    //graphicsResource->compress();
 	graphicsResource->unmapResource();
 	graphicsResource->unregisterResource();
 }

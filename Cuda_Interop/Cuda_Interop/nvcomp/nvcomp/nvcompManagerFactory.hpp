@@ -46,6 +46,8 @@ namespace nvcomp {
  * This synchronizes the stream
  * 
  */ 
-std::shared_ptr<nvcompManagerBase> create_manager(const uint8_t* comp_buffer, cudaStream_t stream = 0, const int device_id = 0);
+std::shared_ptr<nvcompManagerBase> create_manager(
+    const uint8_t* comp_buffer, cudaStream_t stream = 0, 
+    const int device_id = 0, ChecksumPolicy checksum_policy=NoComputeNoVerify);
 
 } // namespace nvcomp

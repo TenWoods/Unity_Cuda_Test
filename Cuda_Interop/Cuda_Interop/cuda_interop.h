@@ -100,7 +100,7 @@ void CHECK_ERROR(cudaError_t err, std::string filename, const int line)
         log_file.open("error_log.txt");
     if (err != cudaSuccess)
     {
-        log_file << '[' << cudaGetErrorString(err) << "] in " << filename << ", line" << line << std::endl;
+        log_file << "cuda error: " << '[' << cudaGetErrorString(err) << "] in " << filename << ", line" << line << std::endl;
     }
 }
 
@@ -110,7 +110,7 @@ void CHECK_NVCOMP(nvcompStatus_t status, std::string filename, const int line)
         log_file.open("error_log.txt");
     if (status != nvcompSuccess)
     {
-        log_file << '[' << nvcompGetStatusString(status) << "] in " << filename << ", line" << line << std::endl;
+        log_file << "nvcomp error: " << '[' << nvcompGetStatusString(status) << "] in " << filename << ", line" << line << std::endl;
     }
 }
 

@@ -37,9 +37,18 @@ struct BitcompFormatSpecHeader {
   int algo;
 };
 
+/**
+ * @brief High-level interface class for Bitcomp compressor
+ * 
+ * @note Any uncompressed data buffer to be compressed MUST be a size that is a
+ * multiple of the data type size, else compression may crash or result in
+ * invalid output.
+ */
 struct BitcompManager : PimplManager {
 
-  BitcompManager(nvcompType_t data_type, int bitcomp_algo = 0, cudaStream_t user_stream = 0, const int device_id = 0);
+  BitcompManager(
+    nvcompType_t data_type, int bitcomp_algo = 0, 
+    cudaStream_t user_stream = 0, const int device_id = 0, ChecksumPolicy checksum_policy = NoComputeNoVerify);
 
   ~BitcompManager();
 };

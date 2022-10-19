@@ -100,6 +100,7 @@ nvcompStatus_t nvcompBatchedANSCompressGetMaxOutputChunkSize(
  * @param device_temp_ptr The temporary GPU workspace, could be NULL in case temprorary space is not needed.
  * @param temp_bytes The size of the temporary GPU workspace.
  * @param device_compressed_ptr The pointers on the GPU, to the output location for each compressed batch item (output).
+ * Each pointer must be aligned to an 8-byte boundary.
  * @param device_compressed_bytes The compressed size of each chunk on the GPU (output).
  * @param format_opts Compression options.
  * @param stream The stream to operate on.
@@ -133,6 +134,15 @@ nvcompStatus_t nvcompBatchedANSDecompressGetTempSize(
     size_t num_chunks, size_t max_uncompressed_chunk_bytes, size_t* temp_bytes);
 
 /**
+ * @brief Get the amount of temp space required on the GPU for decompression with extra total size argument.
+ * @param max_uncompressed_total_size  The total decompressed size of all the chunks. Unused in ANS.
+ *
+ * @return nvcompSuccess if successful, and an error code otherwise.
+ */
+nvcompStatus_t nvcompBatchedANSDecompressGetTempSizeEx(
+    size_t num_chunks, size_t max_uncompressed_chunk_bytes, size_t* temp_bytes, size_t max_uncompressed_total_size );    
+
+/**
  * @brief Compute uncompressed sizes.
  *
  * @param device_compresed_ptrs The pointers on the GPU, to the compressed chunks.
@@ -153,7 +163,8 @@ nvcompStatus_t nvcompBatchedANSGetDecompressSizeAsync(
 /**
  * @brief Perform decompression.
  *
- * @param device_compresed_ptrs The pointers on the GPU, to the compressed chunks.
+ * @param device_compresed_ptrs The pointers on the GPU, to the compressed chunks. 
+ * Each pointer must be aligned to an 8-byte boundary.
  * @param device_compressed_bytes The size of each compressed chunk on the GPU.
  * @param device_uncompressed_bytes The size of each device_uncompressed_ptr[i] buffer.
  * @param device_actual_uncompressed_bytes The actual size of each uncompressed chunk

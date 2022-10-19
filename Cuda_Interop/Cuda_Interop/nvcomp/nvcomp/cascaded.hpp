@@ -37,11 +37,19 @@ struct CascadedFormatSpecHeader {
   nvcompBatchedCascadedOpts_t options;
 };
 
+/**
+ * @brief High-level interface class for Cascaded compressor
+ *
+ * @note Any uncompressed data buffer to be compressed MUST be a size that is a
+ * multiple of the data type size, else compression may crash or result in
+ * invalid output.
+ */
 struct CascadedManager : PimplManager {
   CascadedManager(
       const nvcompBatchedCascadedOpts_t& options = nvcompBatchedCascadedDefaultOpts,
       cudaStream_t user_stream = 0,
-      int device_id = 0);
+      int device_id = 0,
+      ChecksumPolicy checksum_policy = NoComputeNoVerify);
 
   virtual ~CascadedManager();
 };

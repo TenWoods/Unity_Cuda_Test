@@ -1,0 +1,103 @@
+{
+	"inputs" : 
+	[
+		{
+			"path" : "CMakeLists.txt"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/CMakeFiles/3.23.2/CMakeSystem.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/michael/yang/clion-2022.1.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeSystemSpecificInitialize.cmake"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/CMakeFiles/3.23.2/CMakeCXXCompiler.cmake"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/CMakeFiles/3.23.2/CMakeCUDACompiler.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/michael/yang/clion-2022.1.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeSystemSpecificInformation.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/michael/yang/clion-2022.1.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeGenericSystem.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/michael/yang/clion-2022.1.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeInitializeConfigs.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/michael/yang/clion-2022.1.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/michael/yang/clion-2022.1.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/UnixPaths.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/michael/yang/clion-2022.1.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeCXXInformation.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/michael/yang/clion-2022.1.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeLanguageInformation.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/michael/yang/clion-2022.1.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/GNU-CXX.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/michael/yang/clion-2022.1.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/GNU.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/michael/yang/clion-2022.1.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/CMakeCommonCompilerMacros.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/michael/yang/clion-2022.1.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux-GNU-CXX.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/michael/yang/clion-2022.1.3/bin/cmake/linux/share/cmake-3.23/Modules/Platform/Linux-GNU.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/michael/yang/clion-2022.1.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeCommonLanguageInclude.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/michael/yang/clion-2022.1.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeCUDAInformation.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/michael/yang/clion-2022.1.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/NVIDIA-CUDA.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/michael/yang/clion-2022.1.3/bin/cmake/linux/share/cmake-3.23/Modules/Compiler/CMakeCommonCompilerMacros.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/home/michael/yang/clion-2022.1.3/bin/cmake/linux/share/cmake-3.23/Modules/CMakeCommonLanguageInclude.cmake"
+		}
+	],
+	"kind" : "cmakeFiles",
+	"paths" : 
+	{
+		"build" : "/home/michael/yang/unity_cuda_test/Cuda_Interop/Cuda_Interop/cmake-build-debug",
+		"source" : "/home/michael/yang/unity_cuda_test/Cuda_Interop/Cuda_Interop"
+	},
+	"version" : 
+	{
+		"major" : 1,
+		"minor" : 0
+	}
+}

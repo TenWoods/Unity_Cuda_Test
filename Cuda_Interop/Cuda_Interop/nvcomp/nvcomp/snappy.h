@@ -59,6 +59,21 @@ nvcompStatus_t nvcompBatchedSnappyDecompressGetTempSize(
     size_t num_chunks, size_t max_uncompressed_chunk_size, size_t* temp_bytes);
 
 /**
+ * @brief Get the amount of temp space required on the GPU for decompression.
+ *
+ * @param num_chunks The number of items in the batch.
+ * @param max_uncompressed_chunk_size The size of the largest chunk when uncompressed.
+ * @param temp_bytes The amount of temporary GPU space that will be required to
+ * decompress.
+ * @param max_uncompressed_total_size  The total decompressed size of all the chunks. 
+ * Unused in snappy.
+ *
+ * @return nvcompSuccess if successful, and an error code otherwise.
+ */
+nvcompStatus_t nvcompBatchedSnappyDecompressGetTempSizeEx(
+    size_t num_chunks, size_t max_uncompressed_chunk_size, size_t* temp_bytes, size_t max_uncompressed_total_size );    
+
+/**
  * @brief Compute uncompressed sizes.
  *
  * @param device_compresed_ptrs The pointers on the GPU, to the compressed chunks.

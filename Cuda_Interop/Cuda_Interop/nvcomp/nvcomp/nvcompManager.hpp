@@ -61,6 +61,7 @@ public: // API
   size_t uncompressed_buffer_size;
   size_t max_compressed_buffer_size;
   size_t num_chunks;
+  bool compute_checksums;
 
   /**
    * @brief Construct the config given an nvcompStatus_t memory pool
@@ -94,7 +95,8 @@ private: // pimpl to hide pool implementation
 
 public: // API
   size_t decomp_data_size;
-  uint32_t num_chunks;
+  size_t num_chunks;
+  bool checksums_present;
 
   /**
    * @brief Construct the config given an nvcompStatus_t memory pool
@@ -127,7 +129,8 @@ struct nvcompManagerBase {
    * @param decomp_buffer_size The uncompressed input data size.
    * \return comp_config Result
    */
-  virtual CompressionConfig configure_compression(const size_t decomp_buffer_size) = 0;
+  virtual CompressionConfig configure_compression(
+    const size_t decomp_buffer_size) = 0;
 
   /**
    * @brief Perform compression asynchronously.
@@ -151,7 +154,8 @@ struct nvcompManagerBase {
    * @param comp_buffer The compressed input data (GPU accessible).
    * \return decomp_config Result
    */
-  virtual DecompressionConfig configure_decompression(const uint8_t* comp_buffer) = 0;
+  virtual DecompressionConfig configure_decompression(
+    const uint8_t* comp_buffer) = 0;
 
   /**
    * @brief Configure the decompression using a CompressionConfig object. 
@@ -163,7 +167,8 @@ struct nvcompManagerBase {
    * @param comp_config The config used to compress a buffer
    * \return decomp_config Result
    */
-  virtual DecompressionConfig configure_decompression(const CompressionConfig& comp_config) = 0;
+  virtual DecompressionConfig configure_decompression(
+    const CompressionConfig& comp_config) = 0;
 
   /**
    * @brief Perform decompression asynchronously.

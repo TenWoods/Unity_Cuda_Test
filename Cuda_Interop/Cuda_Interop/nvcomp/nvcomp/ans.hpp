@@ -38,9 +38,14 @@ struct ANSFormatSpecHeader {
   // Empty for now
 };
 
+/**
+ * @brief High-level interface class for ANS compressor
+ */
 struct ANSManager : PimplManager {
 
-  ANSManager(size_t uncomp_chunk_size, cudaStream_t user_stream = 0, const int device_id = 0);
+  ANSManager(
+    size_t uncomp_chunk_size, 
+    cudaStream_t user_stream = 0, const int device_id = 0, ChecksumPolicy checksum_policy = NoComputeNoVerify);
 
   ~ANSManager();
 };

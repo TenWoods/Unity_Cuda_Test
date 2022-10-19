@@ -229,6 +229,8 @@ nvcompStatus_t nvcompBatchedBitcompCompressGetMaxOutputChunkSize(
  * at locations with alignments of the data type.
  * @param[in] device_uncompressed_bytes Sizes of the uncompressed partitions in
  * bytes. The sizes should reside in device-accessible memory.
+ * Each chunk size MUST be a multiple of the size of the data type specified by
+ * format_opts.data_type, else this may crash or produce invalid output.
  * @param[in] max_uncompressed_chunk_bytes This argument is not used.
  * @param[in] batch_size Number of partitions to compress.
  * @param[in] device_temp_ptr This argument is not used.
@@ -356,6 +358,22 @@ nvcompStatus_t nvcompBatchedBitcompDecompressGetTempSize(
     size_t batch_size,
     size_t max_chunk_bytes,
     size_t * temp_bytes);
+
+/**
+ * @brief Return the temp size needed for Bitcomp decompression.
+ * Bitcomp currently doesn't use any temp memory.
+ * 
+ * @param[in] batch_size  Number of chunks
+ * @param[in] max_chunk_bytes Size in bytes of the largest chunk
+ * @param[in] format_opts Bitcomp options
+ * @param[in] max_uncompressed_total_size  The total decompressed size of all the chunks. Unused in bitcomp.
+ * @param[out] temp_bytes The temp size
+ */
+nvcompStatus_t nvcompBatchedBitcompDecompressGetTempSizeEx(
+    size_t batch_size,
+    size_t max_chunk_bytes,
+    size_t * temp_bytes,
+    size_t max_uncompressed_total_size );
 
 #ifdef __cplusplus
 }

@@ -41,8 +41,8 @@ extern "C" {
  *****************************************************************************/
 
 #define NVCOMP_MAJOR_VERSION 2
-#define NVCOMP_MINOR_VERSION 2
-#define NVCOMP_PATCH_VERSION 0
+#define NVCOMP_MINOR_VERSION 4
+#define NVCOMP_PATCH_VERSION 1
 
 /* Supported datatypes */
 typedef enum nvcompType_t

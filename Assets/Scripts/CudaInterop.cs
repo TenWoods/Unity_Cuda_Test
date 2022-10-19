@@ -5,10 +5,10 @@ using UnityEngine.Rendering;
 
 public class CudaInterop : MonoBehaviour
 {
+    //Call C++
     #if UNITY_STANDALONE_LINUX
     [DllImport("libCuda_Interop", EntryPoint = "SendTextureIDToCuda")]
     #elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
-    //Call C++
     [DllImport("Cuda_Interop", EntryPoint = "SendTextureIDToCuda")]
     #endif   
     private static extern void SendTextureIDToCuda(int texture_id, int width, int height);

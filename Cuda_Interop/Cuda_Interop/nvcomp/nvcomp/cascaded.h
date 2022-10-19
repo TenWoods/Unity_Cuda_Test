@@ -129,10 +129,6 @@ nvcompStatus_t nvcompBatchedCascadedCompressGetTempSize(
  * is, the minimum amount of output memory required to be given
  * nvcompBatchedCascadedCompressAsync() for each batch item.
  *
- * Chunk size must be limited by the shared memory available on the GPU
- * being used.  In general, it must not exceed 16384, but 4096 bytes is
- * recommended.
- *
  * @param max_uncompressed_chunk_bytes The maximum size of a chunk in the batch.
  * @param format_opts The Cascaded compression options to use.
  * @param max_compressed_byes The maximum compressed size of the largest chunk
@@ -160,6 +156,8 @@ nvcompStatus_t nvcompBatchedCascadedCompressGetMaxOutputChunkSize(
  * at locations with alignments of the data type.
  * @param[in] device_uncompressed_bytes Sizes of the uncompressed partitions in
  * bytes. The sizes should reside in device-accessible memory.
+ * Each chunk size MUST be a multiple of the size of the data type specified by
+ * format_opts.type, else this may crash or produce invalid output.
  * @param[in] max_uncompressed_chunk_bytes This argument is not used.
  * @param[in] batch_size Number of partitions to compress.
  * @param[in] device_temp_ptr This argument is not used.
@@ -202,6 +200,23 @@ nvcompStatus_t nvcompBatchedCascadedCompressAsync(
  */
 nvcompStatus_t nvcompBatchedCascadedDecompressGetTempSize(
     size_t num_chunks, size_t max_uncompressed_chunk_bytes, size_t* temp_bytes);
+
+/**
+ * @brief Get the amount of temp space required on the GPU for decompression.
+ *
+ * @param num_chunks The number of items in the batch.
+ * @param max_uncompressed_chunk_bytes The size of the largest chunk in bytes
+ * when uncompressed.
+ * @param temp_bytes The amount of temporary GPU space that will be required to
+ * decompress.
+ * @param max_uncompressed_total_size  The total decompressed size of all the chunks. 
+ * Unused in Cascaded.
+ *
+ * @return nvcompSuccess if successful, and an error code otherwise.
+ */
+nvcompStatus_t nvcompBatchedCascadedDecompressGetTempSizeEx(
+    size_t num_chunks, size_t max_uncompressed_chunk_bytes, 
+    size_t* temp_bytes, size_t max_uncompressed_total_size);
 
 /**
  * @brief Perform batched asynchronous decompression.

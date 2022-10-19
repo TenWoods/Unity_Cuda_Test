@@ -8,7 +8,10 @@ include_directories(nvcomp)
 include_directories(nvcomp/nvcomp)
 include_directories(PluginAPI)
 
+link_directories(/home/michael/yang/lib/nvcomp/lib)
+
 add_library(Cuda_Interop SHARED cuda_interop.cu)
+target_link_libraries(Cuda_Interop -lnvcomp)
 
 set_target_properties(Cuda_Interop PROPERTIES
         CUDA_SEPARABLE_COMPILATION ON

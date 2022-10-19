@@ -38,9 +38,14 @@ struct SnappyFormatSpecHeader {
   // Empty for now
 };
 
+/**
+ * @brief High-level interface class for Snappy compressor
+ */
 struct SnappyManager : PimplManager {
 
-  SnappyManager(size_t uncomp_chunk_size, cudaStream_t user_stream = 0, int device_id = 0);
+  SnappyManager(
+    size_t uncomp_chunk_size, cudaStream_t user_stream = 0, 
+    int device_id = 0, ChecksumPolicy checksum_policy=NoComputeNoVerify);
 
   ~SnappyManager();
 };
