@@ -35,6 +35,8 @@ public class CudaInterop : MonoBehaviour
     private Material depth_mat;
     private Camera _camera;
 
+    private bool isFirst = true;
+
 
     // Start is called before the first frame update
     private void Start()
@@ -70,6 +72,9 @@ public class CudaInterop : MonoBehaviour
 
     private void OnPostRender() 
     {
+        if (!isFirst)
+            return;
+        isFirst = false;
         
         //Debug.Log(colorTexture.GetNativeTexturePtr());
         RenderTexture.active = rt;

@@ -237,7 +237,7 @@ nvcompStatus_t nvcompBatchedCascadedDecompressGetTempSizeEx(
  * will set the status specified in \p device_statuses corresponding to the
  * overflow partition to `nvcompErrorCannotDecompress`.
  * @param[out] device_actual_uncompressed_bytes Array with size \p batch_size of
- * the actual number of bytes decompressed for every partitions. This argument
+ * the actual number of bytes decompressed for veery partitions. This argument
  * needs to be preallocated.
  * @param[in] batch_size Number of partitions to decompress.
  * @param[in] device_temp_ptr This argument is not used.
