@@ -117,13 +117,13 @@ void GraphicsResource::compress()
                                                     nvcompBatchedCascadedDefaultOpts,
                                                     stream), __FILE__, __LINE__);
     //debug start
-    size_t* host_out_bytes;
-    cudaMallocHost(&host_out_bytes, sizeof(size_t)*batch_size);
-    cudaMemcpy(host_out_bytes, device_compressed_bytes, sizeof(size_t) * batch_size, cudaMemcpyDeviceToHost);
-    for (int i = 0; i < batch_size; i++)
-    {
-        log_file << "compressed bytes: " << *(host_out_bytes + 1) << std::endl;
-    }
+//    size_t* host_out_bytes;
+//    cudaMallocHost(&host_out_bytes, sizeof(size_t)*batch_size);
+//    cudaMemcpy(host_out_bytes, device_compressed_bytes, sizeof(size_t) * batch_size, cudaMemcpyDeviceToHost);
+//    for (int i = 0; i < batch_size; i++)
+//    {
+//        log_file << "compressed bytes: " << *(host_out_bytes + 1) << std::endl;
+//    }
     //debug end
 
     //decompress
@@ -151,13 +151,13 @@ void GraphicsResource::compress()
                                                       uncompressed_ptrs,
                                                       device_statuses, stream), __FILE__, __LINE__);
     //debug start
-    size_t* host_actual_uncompressed_bytes;
-    cudaMallocHost(&host_actual_uncompressed_bytes, sizeof(size_t)*batch_size);
-    cudaMemcpy(host_actual_uncompressed_bytes, device_actual_uncompressed_bytes, sizeof(size_t)*batch_size, cudaMemcpyDeviceToHost);
-    for (int i = 0; i < batch_size; i++)
-    {
-        log_file << "decompressed bytes: " << *(host_actual_uncompressed_bytes + 1) << std::endl;
-    }
+//    size_t* host_actual_uncompressed_bytes;
+//    cudaMallocHost(&host_actual_uncompressed_bytes, sizeof(size_t)*batch_size);
+//    cudaMemcpy(host_actual_uncompressed_bytes, device_actual_uncompressed_bytes, sizeof(size_t)*batch_size, cudaMemcpyDeviceToHost);
+//    for (int i = 0; i < batch_size; i++)
+//    {
+//        log_file << "decompressed bytes: " << *(host_actual_uncompressed_bytes + 1) << std::endl;
+//    }
     //debug end
     output_decompress(chunk_size, batch_size);
 }
@@ -165,23 +165,36 @@ void GraphicsResource::compress()
 void GraphicsResource::output_decompress(size_t chunk_size, size_t batch_size)
 {
     std::ofstream file;
-    file.open("debug_decompress.txt");
+    file.open("debug_decompress.ppm");
     void** test;
     cudaMallocHost(&test, sizeof(size_t) * batch_size);
-    CHECK_ERROR(cudaMemcpy(test, device_compressed_ptrs, sizeof(size_t) * batch_size, cudaMemcpyDeviceToHost), __FILE__, __LINE__);
-//    file << "P3" << std::endl
-//         << "1920 1080" << std::endl
-//         << "255" << std::endl;
-    //int char_num = chunk_size / sizeof(unsigned char);
-    //int  count = 0;
-    file << "chunk size: " << chunk_size << "batch size: " << batch_size << std::endl;
-    file << chunk_size * batch_size << std::endl;
-    file << data_length;
+    //CHECK_ERROR(cudaMemcpy(test, device_compressed_ptrs, sizeof(size_t) * batch_size, cudaMemcpyDeviceToHost), __FILE__, __LINE__);
+
+    file << "P3" << std::endl
+    << "1920 1080" << std::endl
+    << "255" << std::endl;
+    cudaMemcpy(test, uncompressed_ptrs , sizeof(size_t)*batch_size, cudaMemcpyDeviceToHost);
 //    for (int i = 0; i < batch_size; i++)
+//    {
+//        if ((i+1) < batch_size)
+//        {
+//            cudaMemcpy(*(test + i), *(uncompressed_ptrs + i), chunk_size, cudaMemcpyDeviceToHost);
+//        }
+//        else
+//        {
+//            cudaMemcpy(*(test + i), *(uncompressed_ptrs + i), data_length - (chunk_size*i), cudaMemcpyDeviceToHost);
+//        }
+//    }
+//    int char_num = chunk_size / sizeof(unsigned char);
+//    int  count = 0;
+//    file << "chunk size: " << chunk_size << "batch size: " << batch_size << std::endl;
+//    file << chunk_size * batch_size << std::endl;
+//    file << data_length;
+//    for (int i = 0; i < batch_size-1; i++)
 //    {
 //        for (int j = 0; j < char_num; j++)
 //        {
-//            file << 255;
+//            file << (unsigned int)*((char *)(test + i) + j);
 //            if (count < 2)
 //            {
 //                file << ' ';
