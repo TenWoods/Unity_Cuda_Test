@@ -66,7 +66,7 @@ private:
     bool isFirstDebug;
     bool isFirstCompress;
     void output_for_debug();
-    void output_decompress(size_t chunk_size, size_t batch_size);
+    void output_decompress(size_t batch_size, const size_t* host_uncompressed_bytes);
     //void initialize_nvcomp();
 
 

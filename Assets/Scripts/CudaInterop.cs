@@ -49,6 +49,8 @@ public class CudaInterop : MonoBehaviour
         _camera = GetComponent<Camera>();
         _camera.depthTextureMode = _camera.depthTextureMode | DepthTextureMode.Depth;
         rt = _camera.targetTexture;
+        Debug.Log(rt.width);
+        Debug.Log(rt.height);
         depth_rt = new RenderTexture(rt.width, rt.height, 32);
         depthTexture = new Texture2D(rt.width, rt.height);
         colorTexture = new Texture2D(rt.width, rt.height);

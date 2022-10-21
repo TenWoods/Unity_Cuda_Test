@@ -18,7 +18,7 @@ void GraphicsResource::copyCudaArray()
 	CHECK_ERROR(cudaGraphicsSubResourceGetMappedArray(&array, resource, 0, 0), __FILE__, __LINE__);
     CHECK_ERROR(cudaMemcpy2DFromArray(data_pointer, width * sizeof(uchar4), array, 0, 0, width * sizeof(uchar4), height, cudaMemcpyDeviceToDevice), __FILE__, __LINE__);
     //Debug
-	//output_for_debug();
+	output_for_debug();
 }
 
 void GraphicsResource::unmapResource()
@@ -80,7 +80,7 @@ void GraphicsResource::compress()
             host_uncompressed_bytes[i] = data_length - (chunk_size*i);
         }
     }
-    void ** host_uncompressed_ptrs;
+    void** host_uncompressed_ptrs;
     CHECK_ERROR(cudaMallocHost(&host_uncompressed_ptrs, sizeof(size_t) * batch_size), __FILE__, __LINE__);
     for (int chunk_index = 0; chunk_index < batch_size; chunk_index++)
     {
@@ -109,7 +109,8 @@ void GraphicsResource::compress()
 
     CHECK_NVCOMP(nvcompBatchedCascadedCompressAsync(uncompressed_ptrs,
                                                     uncompressed_bytes,
-                                                    chunk_size, batch_size,
+                                                    chunk_size,
+                                                    batch_size,
                                                     temp_ptr,
                                                     temp_bytes,
                                                     device_compressed_ptrs,
@@ -122,7 +123,7 @@ void GraphicsResource::compress()
 //    cudaMemcpy(host_out_bytes, device_compressed_bytes, sizeof(size_t) * batch_size, cudaMemcpyDeviceToHost);
 //    for (int i = 0; i < batch_size; i++)
 //    {
-//        log_file << "compressed bytes: " << *(host_out_bytes + 1) << std::endl;
+//        log_file << "compressed bytes: " << *(host_out_bytes + i) << std::endl;
 //    }
     //debug end
 
@@ -151,64 +152,49 @@ void GraphicsResource::compress()
                                                       uncompressed_ptrs,
                                                       device_statuses, stream), __FILE__, __LINE__);
     //debug start
-//    size_t* host_actual_uncompressed_bytes;
-//    cudaMallocHost(&host_actual_uncompressed_bytes, sizeof(size_t)*batch_size);
-//    cudaMemcpy(host_actual_uncompressed_bytes, device_actual_uncompressed_bytes, sizeof(size_t)*batch_size, cudaMemcpyDeviceToHost);
+    size_t* host_actual_uncompressed_bytes;
+    cudaMallocHost(&host_actual_uncompressed_bytes, sizeof(size_t)*batch_size);
+    cudaMemcpy(host_actual_uncompressed_bytes, device_actual_uncompressed_bytes, sizeof(size_t)*batch_size, cudaMemcpyDeviceToHost);
 //    for (int i = 0; i < batch_size; i++)
 //    {
-//        log_file << "decompressed bytes: " << *(host_actual_uncompressed_bytes + 1) << std::endl;
+//        log_file << "decompressed bytes: " << *(host_actual_uncompressed_bytes + i) << std::endl;
 //    }
     //debug end
-    output_decompress(chunk_size, batch_size);
+    output_decompress(batch_size, host_actual_uncompressed_bytes);
 }
 
-void GraphicsResource::output_decompress(size_t chunk_size, size_t batch_size)
+void GraphicsResource::output_decompress(size_t batch_size, const size_t* host_uncompressed_bytes)
 {
-    std::ofstream file;
-    file.open("debug_decompress.ppm");
     void** test;
     cudaMallocHost(&test, sizeof(size_t) * batch_size);
-    //CHECK_ERROR(cudaMemcpy(test, device_compressed_ptrs, sizeof(size_t) * batch_size, cudaMemcpyDeviceToHost), __FILE__, __LINE__);
-
+    void** host_uncompressed_ptrs;
+    cudaMallocHost(&host_uncompressed_ptrs, sizeof(size_t) * batch_size);
+    cudaMemcpy(host_uncompressed_ptrs, uncompressed_ptrs, sizeof(size_t) * batch_size, cudaMemcpyDeviceToHost);
+    for (int i = 0; i < batch_size; i++)
+    {
+        //log_file << host_uncompressed_bytes[i] << std::endl;
+        CHECK_ERROR(cudaMallocHost(test+i, host_uncompressed_bytes[i]), __FILE__, __LINE__);
+        CHECK_ERROR(cudaMemcpyAsync(test[i], host_uncompressed_ptrs[i] , host_uncompressed_bytes[i], cudaMemcpyDeviceToHost, stream), __FILE__, __LINE__);
+    }
+    cudaStreamSynchronize(stream);
+    std::ofstream file;
+    file.open("debug_decompress.ppm");
     file << "P3" << std::endl
-    << "1920 1080" << std::endl
-    << "255" << std::endl;
-    cudaMemcpy(test, uncompressed_ptrs , sizeof(size_t)*batch_size, cudaMemcpyDeviceToHost);
-//    for (int i = 0; i < batch_size; i++)
-//    {
-//        if ((i+1) < batch_size)
-//        {
-//            cudaMemcpy(*(test + i), *(uncompressed_ptrs + i), chunk_size, cudaMemcpyDeviceToHost);
-//        }
-//        else
-//        {
-//            cudaMemcpy(*(test + i), *(uncompressed_ptrs + i), data_length - (chunk_size*i), cudaMemcpyDeviceToHost);
-//        }
-//    }
-//    int char_num = chunk_size / sizeof(unsigned char);
-//    int  count = 0;
-//    file << "chunk size: " << chunk_size << "batch size: " << batch_size << std::endl;
-//    file << chunk_size * batch_size << std::endl;
-//    file << data_length;
-//    for (int i = 0; i < batch_size-1; i++)
-//    {
-//        for (int j = 0; j < char_num; j++)
-//        {
-//            file << (unsigned int)*((char *)(test + i) + j);
-//            if (count < 2)
-//            {
-//                file << ' ';
-//                count++;
-//            }
-//            else
-//            {
-//                file << std::endl;
-//                count = 0;
-//            }
-//        }
-//    }
-    cudaFree(test);
-    file.close();
+        << "1920 1080" << std::endl
+        << "255" << std::endl;
+    for (int i = 0; i < batch_size; i++)
+    {
+        int batch_image_size = host_uncompressed_bytes[i]/sizeof(unsigned char)/4;
+        for (int j = 0; j < batch_image_size; j++)
+        {
+            unsigned char* c = (unsigned char*)test[i] + j * 4;
+            file << (int)*c << ' '
+                 << (int)*(c + 1) << ' '
+                 << (int)*(c + 2) << std::endl;
+        }
+    }
+    //cudaFree(test);
+//    file.close();
 }
 
 UNITY_INTERFACE_EXPORT void SendTextureIDToCuda(int texture_id, int width, int height)
