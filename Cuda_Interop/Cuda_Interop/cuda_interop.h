@@ -24,14 +24,16 @@ public:
     size_t data_length;                   //texture data length
     void* data_pointer;                   //texture data pointer
     //data structure for compression
-    void* temp_ptr;                       //temp pointer for nvcomp
-    size_t temp_bytes;                    //temp data size
-    void** device_compressed_ptrs;                       //out pointer for nvcomp
-    size_t* device_compressed_bytes;                    //out data size
-    size_t* uncompressed_bytes;
-    void** uncompressed_ptrs;
+//    void* temp_ptr;                       //temp pointer for nvcomp
+//    size_t temp_bytes;                    //temp data size
+//    void** device_compressed_ptrs;                       //out pointer for nvcomp
+//    size_t* device_compressed_bytes;                    //out data size
+//    size_t* uncompressed_bytes;
+//    void** uncompressed_ptrs;
     cudaStream_t  stream;                 //cuda stream
-
+    bool isMapped;
+    bool isRegistered;
+    int count = 0;
     
     GraphicsResource(int id, size_t width, size_t height) : id(id), width(width), height(height)
     {
@@ -41,17 +43,19 @@ public:
         isFirstDebug = true;
         isFirstCompress = true;
         data_length = width * height * sizeof(uchar4);
-        cudaStreamCreate(&stream);
+        //cudaStreamCreate(&stream);
+        isMapped = false;
+        isRegistered = false;
     }
 
     ~GraphicsResource()
     {
         cudaFree(data_pointer);
-        cudaFree(temp_ptr);
-        cudaFree(device_compressed_ptrs);
-        cudaFree(device_compressed_bytes);
-        cudaFree(uncompressed_bytes);
-        cudaFree(uncompressed_ptrs);
+//        cudaFree(temp_ptr);
+//        cudaFree(device_compressed_ptrs);
+//        cudaFree(device_compressed_bytes);
+//        cudaFree(uncompressed_bytes);
+//        cudaFree(uncompressed_ptrs);
     }
 
     void registerTexture();

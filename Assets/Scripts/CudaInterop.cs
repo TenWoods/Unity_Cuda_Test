@@ -34,23 +34,19 @@ public class CudaInterop : MonoBehaviour
     [SerializeField]
     private Material depth_mat;
     private Camera _camera;
-
-    private bool isFirst = true;
-
+    bool isFirst = true;
 
     // Start is called before the first frame update
     private void Start()
     {
-        #if UNITY_STANDALONE_LINUX
-        Debug.Log("Linux!");
-        #elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
-        Debug.Log("Windows!");
-        #endif
+        // #if UNITY_STANDALONE_LINUX
+        // Debug.Log("Linux!");
+        // #elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+        // Debug.Log("Windows!");
+        // #endif
         _camera = GetComponent<Camera>();
         _camera.depthTextureMode = _camera.depthTextureMode | DepthTextureMode.Depth;
         rt = _camera.targetTexture;
-        Debug.Log(rt.width);
-        Debug.Log(rt.height);
         depth_rt = new RenderTexture(rt.width, rt.height, 32);
         depthTexture = new Texture2D(rt.width, rt.height);
         colorTexture = new Texture2D(rt.width, rt.height);
@@ -64,7 +60,7 @@ public class CudaInterop : MonoBehaviour
     private void OnDisable() 
     {
         RenderPipelineManager.endCameraRendering -= PostRender;
-        //Dispose();
+        Dispose();
     }
 
     private void PostRender(ScriptableRenderContext context, Camera camera)
@@ -74,18 +70,15 @@ public class CudaInterop : MonoBehaviour
 
     private void OnPostRender() 
     {
-        if (!isFirst)
-            return;
-        isFirst = false;
-        
-        //Debug.Log(colorTexture.GetNativeTexturePtr());
+        // if (!isFirst)
+        //     return;
+        // isFirst = false;
         RenderTexture.active = rt;
         colorTexture.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
         colorTexture.Apply();
         Graphics.Blit(rt, depth_rt, depth_mat);
         depthTexture.ReadPixels(new Rect(0, 0, depth_rt.width, depth_rt.height), 0, 0);
         depthTexture.Apply();
-        //Debug.Log(depthTexture.format);
         SendTextureIDToCuda((int)colorTexture.GetNativeTexturePtr(), colorTexture.width, colorTexture.height);
         GL.IssuePluginEvent(GetRenderEventFunc(), 1);
     }

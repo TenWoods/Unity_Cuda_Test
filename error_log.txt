@@ -1,0 +1,9 @@
+0
+cuda error: [an illegal memory access was encountered] in /home/michael/yang/unity_cuda_test/Cuda_Interop/Cuda_Interop/cuda_interop.cu, line47
+cuda error: [an illegal memory access was encountered] in /home/michael/yang/unity_cuda_test/Cuda_Interop/Cuda_Interop/cuda_interop.cu, line48
+1
+cuda error: [an illegal memory access was encountered] in /home/michael/yang/unity_cuda_test/Cuda_Interop/Cuda_Interop/cuda_interop.cu, line25
+cuda error: [an illegal memory access was encountered] in /home/michael/yang/unity_cuda_test/Cuda_Interop/Cuda_Interop/cuda_interop.cu, line26
+cuda error: [an illegal memory access was encountered] in /home/michael/yang/unity_cuda_test/Cuda_Interop/Cuda_Interop/cuda_interop.cu, line37
+cuda error: [an illegal memory access was encountered] in /home/michael/yang/unity_cuda_test/Cuda_Interop/Cuda_Interop/cuda_interop.cu, line38
+cuda error: [an illegal memory access was encountered] in /home/michael/yang/unity_cuda_test/Cuda_Interop/Cuda_Interop/cuda_interop.cu, line96
