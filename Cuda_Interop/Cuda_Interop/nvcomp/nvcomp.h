@@ -30,7 +30,6 @@
 #define NVCOMP_H
 
 #include <cuda_runtime.h>
-#include "nvcomp/shared_types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,8 +40,17 @@ extern "C" {
  *****************************************************************************/
 
 #define NVCOMP_MAJOR_VERSION 2
-#define NVCOMP_MINOR_VERSION 4
+#define NVCOMP_MINOR_VERSION 0
 #define NVCOMP_PATCH_VERSION 1
+
+typedef enum nvcompError_t
+{
+  nvcompSuccess = 0,
+  nvcompErrorInvalidValue = 10,
+  nvcompErrorNotSupported = 11,
+  nvcompErrorCudaError = 1000,
+  nvcompErrorInternal = 10000
+} nvcompError_t;
 
 /* Supported datatypes */
 typedef enum nvcompType_t
@@ -82,7 +90,7 @@ typedef enum nvcompType_t
  *
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
-nvcompStatus_t nvcompDecompressGetMetadata(
+nvcompError_t nvcompDecompressGetMetadata(
     const void* in_ptr,
     size_t in_bytes,
     void** metadata_ptr,
@@ -109,7 +117,7 @@ void nvcompDecompressDestroyMetadata(void* metadata_ptr);
  *
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
-nvcompStatus_t
+nvcompError_t
 nvcompDecompressGetTempSize(const void* metadata_ptr, size_t* temp_bytes);
 
 /**
@@ -122,7 +130,7 @@ nvcompDecompressGetTempSize(const void* metadata_ptr, size_t* temp_bytes);
  *
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
-nvcompStatus_t
+nvcompError_t
 nvcompDecompressGetOutputSize(const void* metadata_ptr, size_t* output_bytes);
 
 /**
@@ -135,7 +143,7 @@ nvcompDecompressGetOutputSize(const void* metadata_ptr, size_t* output_bytes);
  *
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
-nvcompStatus_t
+nvcompError_t
 nvcompDecompressGetType(const void* metadata_ptr, nvcompType_t* type);
 
 /**
@@ -154,7 +162,7 @@ nvcompDecompressGetType(const void* metadata_ptr, nvcompType_t* type);
  *
  * @return nvcompSuccess if successful, and an error code otherwise.
  */
-nvcompStatus_t nvcompDecompressAsync(
+nvcompError_t nvcompDecompressAsync(
     const void* in_ptr,
     size_t in_bytes,
     void* temp_ptr,

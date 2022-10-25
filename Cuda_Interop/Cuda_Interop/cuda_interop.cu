@@ -81,6 +81,117 @@ void GraphicsResource::output_for_debug()
 	file.close();
 }
 
+void GraphicsResource::resizeDeviceMemory(size_t src_capacity, size_t workspace_capacity, size_t dst_capacity)
+{
+    if (this->src_capacity < src_capacity)
+    {
+        if (this->device_src != NULL)
+        {
+            CHECK_ERROR(cudaFree(this->device_src), __FILE__, __LINE__);
+        }
+        CHECK_ERROR(cudaMalloc(&this->device_src, src_capacity + 10), __FILE__, __LINE__);
+        this->src_capacity = src_capacity;
+    }
+    if (this->workspace_capacity < workspace_capacity)
+    {
+        if (this->device_workspace != NULL)
+        {
+            CHECK_ERROR(cudaFree(this->device_workspace), __FILE__, __LINE__);
+        }
+        CHECK_ERROR(cudaMalloc(&this->device_workspace, workspace_capacity), __FILE__, __LINE__);
+        this->workspace_capacity = workspace_capacity;
+    }
+    if (this->dst_capacity < dst_capacity)
+    {
+        if (this->device_dst != NULL)
+        {
+            CHECK_ERROR(cudaFree(this->device_dst), __FILE__, __LINE__);
+        }
+        CHECK_ERROR(cudaMalloc(&this->device_dst, dst_capacity), __FILE__, __LINE__);
+        this->dst_capacity = dst_capacity;
+    }
+}
+
+//old version
+void GraphicsResource::compress()
+{
+    if (!isRegistered)
+    {
+        registerTexture();
+    }
+    cudaDeviceSynchronize();
+    if (!isMapped)
+    {
+        mapResource();
+    }
+    copyCudaArray();
+    if (!log_file.is_open())
+        log_file.open("error_log.txt");
+    log_file << '[' << count++ << ']' << ' ';
+    src_limit = data_length;
+//    nvcompCascadedFormatOpts format;
+//    format.num_RLEs = 1;
+//    format.num_deltas = 1;
+//    format.use_bp = 1;
+    nvcompType_t type = NVCOMP_TYPE_UINT;
+
+//    void* metadata_ptr;
+    size_t workspace_capacity;  //temp_bytes
+    size_t dst_capacity;        //out_bytes
+    size_t metadata_bytes;      //in_bytes
+
+    CHECK_NVCOMP(nvcompCascadedCompressConfigure(
+            NULL,
+            type,
+            src_limit,
+            &metadata_bytes,
+            &workspace_capacity,
+            &dst_capacity
+    ), __FILE__, __LINE__);
+    resizeDeviceMemory(0, workspace_capacity, dst_capacity);
+    CHECK_NVCOMP(nvcompCascadedCompressAsync(
+            NULL,
+            type,
+            data_pointer,       //uncompressed_ptr
+            src_limit,             //uncompressed_bytes
+            device_workspace,      //temp_ptr
+            this->workspace_capacity,    //temp_bytes
+            device_dst,            //compressed_ptr
+            &dst_limit,            //compressed_bytes
+            stream
+    ), __FILE__, __LINE__);
+    log_file << src_limit << "->" << dst_limit << std::endl;
+    //decompress for debug
+    //resizeDeviceMemory(dst_limit, 0, 0);
+//    if (isFirstCompress) {
+//        CHECK_NVCOMP(nvcompCascadedDecompressConfigure(
+//                device_dst,
+//                dst_limit,
+//                &metadata_ptr,
+//                &metadata_bytes,
+//                &workspace_capacity,
+//                &dst_capacity,
+//                stream
+//        ), __FILE__, __LINE__);
+//        resizeDeviceMemory(dst_capacity, workspace_capacity, 0);
+//        CHECK_NVCOMP(nvcompCascadedDecompressAsync(
+//                device_dst,
+//                dst_limit,
+//                metadata_ptr,
+//                metadata_bytes,
+//                device_workspace,
+//                this->workspace_capacity,
+//                device_src,
+//                src_capacity,
+//                stream
+//        ), __FILE__, __LINE__);
+//        output_decompress();
+//        isFirstCompress = false;
+//    }
+    unmapResource();
+}
+
+//new version
 //void GraphicsResource::compress()
 //{
 //    if (!isMapped)
@@ -210,8 +321,25 @@ void GraphicsResource::output_for_debug()
     //output_decompress(batch_size, host_actual_uncompressed_bytes);
 //}
 
-void GraphicsResource::output_decompress(size_t batch_size, const size_t* host_uncompressed_bytes)
+void GraphicsResource::output_decompress(/*size_t batch_size, const size_t* host_uncompressed_bytes*/)
 {
+    std::ofstream file;
+    file.open("debug.ppm");
+    void* test = malloc(src_limit);
+    CHECK_ERROR(cudaMemcpy(test, device_src, src_limit, cudaMemcpyDeviceToHost), __FILE__, __LINE__);
+    file << "P3" << std::endl
+         << "1920 1080" << std::endl
+         << "255" << std::endl;
+    int texture_size = width * height;
+    for (int i = 0; i < texture_size; i++)
+    {
+        unsigned char* c = (unsigned char*)test + i * 4;
+        file << (int)*c << ' '
+             << (int)*(c + 1) << ' '
+             << (int)*(c + 2) << std::endl;
+    }
+    free(test);
+    file.close();
 //    void** test;
 //    cudaMallocHost(&test, sizeof(size_t) * batch_size);
 //    void** host_uncompressed_ptrs;
@@ -254,16 +382,12 @@ UNITY_INTERFACE_EXPORT void SendTextureIDToCuda(int texture_id, int width, int h
 
 static void UNITY_INTERFACE_API OnRenderEvent(int eventID)
 {
-    if (!log_file.is_open())
-        log_file.open("error_log.txt");
-    log_file << graphicsResource->count++ << std::endl;
-	graphicsResource->registerTexture();
-    if (!graphicsResource->isRegistered)
-        return;
-	graphicsResource->mapResource();
-	graphicsResource->copyCudaArray();
+	//graphicsResource->registerTexture();
+	//graphicsResource->mapResource();
+	//graphicsResource->copyCudaArray();
     graphicsResource->compress();
-	graphicsResource->unmapResource();
+    //graphicsResource->decompress();
+	//graphicsResource->unmapResource();
 }
 
 UnityRenderingEvent UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetRenderEventFunc()
@@ -273,8 +397,7 @@ UnityRenderingEvent UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetRenderEventFun
 
 UNITY_INTERFACE_EXPORT void Dispose()
 {
-    graphicsResource->unmapResource();
-    graphicsResource->unregisterResource();
+    delete graphicsResource;
 	log_file.close();
 }
 

@@ -30,6 +30,20 @@ public:
 //    size_t* device_compressed_bytes;                    //out data size
 //    size_t* uncompressed_bytes;
 //    void** uncompressed_ptrs;
+    // src device memory
+    void *device_src = nullptr;
+    size_t src_capacity = 0;
+    size_t src_limit = 0;
+
+    // workspace device memory
+    void *device_workspace = nullptr;
+    size_t workspace_capacity = 0;
+
+    // dst device memory
+    void *device_dst = nullptr;
+    size_t dst_capacity = 0;
+    size_t dst_limit = 0;
+
     cudaStream_t  stream;                 //cuda stream
     bool isMapped;
     bool isRegistered;
@@ -51,6 +65,11 @@ public:
     ~GraphicsResource()
     {
         cudaFree(data_pointer);
+        cudaFree(device_src);
+        cudaFree(device_workspace);
+        cudaFree(device_dst);
+        unmapResource();
+        unregisterResource();
 //        cudaFree(temp_ptr);
 //        cudaFree(device_compressed_ptrs);
 //        cudaFree(device_compressed_bytes);
@@ -63,14 +82,15 @@ public:
     void copyCudaArray();
     void unmapResource();
     void unregisterResource();
-
+    void resizeDeviceMemory(size_t src_capacity, size_t workspace_capacity, size_t dst_capacity);
     void compress();
+    //void decompress();
 
 private: 
     bool isFirstDebug;
     bool isFirstCompress;
     void output_for_debug();
-    void output_decompress(size_t batch_size, const size_t* host_uncompressed_bytes);
+    void output_decompress(/*size_t batch_size, const size_t* host_uncompressed_bytes*/);
     //void initialize_nvcomp();
 
 
@@ -89,7 +109,7 @@ extern "C"
 
 static void UNITY_INTERFACE_API OnRenderEvent(int eventID);
 
-std::string nvcompGetStatusString(nvcompStatus_t status)
+std::string nvcompGetStatusString(nvcompError_t status)
 {
     std::string status_string;
     switch (status)
@@ -105,9 +125,6 @@ std::string nvcompGetStatusString(nvcompStatus_t status)
             break;
         case nvcompErrorInternal:
             status_string = "internal";
-            break;
-        case nvcompErrorCannotDecompress:
-            status_string = "can not decompress";
             break;
         default:
             status_string = "success";
@@ -126,7 +143,7 @@ void CHECK_ERROR(cudaError_t err, std::string filename, const int line)
     }
 }
 
-void CHECK_NVCOMP(nvcompStatus_t status, std::string filename, const int line)
+void CHECK_NVCOMP(nvcompError_t status, std::string filename, const int line)
 {
     if (!log_file.is_open())
         log_file.open("error_log.txt");

@@ -269,7 +269,6 @@ CMakeFiles/Cuda_Interop.dir/cuda_interop.cu.o: ../cuda_interop.cu \
   ../PluginAPI/IUnityGraphics.h \
   ../PluginAPI/IUnityInterface.h \
   ../nvcomp/nvcomp.h \
-  ../nvcomp/nvcomp/shared_types.h \
   /usr/include/c++/10/iostream \
   ../nvcomp/nvcomp/cascaded.h
 
@@ -639,8 +638,6 @@ CMakeFiles/Cuda_Interop.dir/cuda_interop.cu.o: ../cuda_interop.cu \
 /usr/include/sm_20_intrinsics.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/types/wint_t.h:
-
-../nvcomp/nvcomp/shared_types.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h:
 
