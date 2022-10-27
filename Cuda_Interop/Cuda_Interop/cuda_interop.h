@@ -12,6 +12,8 @@
 #include "nvcomp/nvcomp.h"
 
 std::ofstream log_file;  //Debug: error output
+std::ofstream fifo_file;
+std::ofstream  output_file;
 
 class GraphicsResource
 {
@@ -104,6 +106,7 @@ extern "C"
 {
     UNITY_INTERFACE_EXPORT void SendTextureIDToCuda(int texture_id, int width, int height);
     UNITY_INTERFACE_EXPORT void Dispose();
+    UNITY_INTERFACE_EXPORT void GenerateNamedPipe();
     UnityRenderingEvent UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetRenderEventFunc();
 }
 

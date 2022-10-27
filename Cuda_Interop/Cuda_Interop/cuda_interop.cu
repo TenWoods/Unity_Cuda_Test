@@ -1,6 +1,8 @@
 ﻿#include "cuda_interop.h"
 #include "cuda_runtime_api.h"
 #include <iostream>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include "nvcomp/cascaded.h"
 
 void GraphicsResource::registerTexture()
@@ -128,6 +130,7 @@ void GraphicsResource::compress()
     if (!log_file.is_open())
         log_file.open("error_log.txt");
     log_file << '[' << count++ << ']' << ' ';
+    std::cout << '[' << count << ']' << std::endl;
     src_limit = data_length;
 //    nvcompCascadedFormatOpts format;
 //    format.num_RLEs = 1;
@@ -137,8 +140,8 @@ void GraphicsResource::compress()
 
 //    void* metadata_ptr;
     size_t workspace_capacity;  //temp_bytes
-    size_t dst_capacity;        //out_bytes
-    size_t metadata_bytes;      //in_bytes
+    size_t dst_capacity;        //out_bytes =
+    size_t metadata_bytes;      //in_bytes =
 
     CHECK_NVCOMP(nvcompCascadedCompressConfigure(
             NULL,
@@ -161,6 +164,23 @@ void GraphicsResource::compress()
             stream
     ), __FILE__, __LINE__);
     log_file << src_limit << "->" << dst_limit << std::endl;
+    void* host_result;
+    cudaMallocHost(&host_result, dst_limit);
+    cudaMemcpy(host_result, device_dst, dst_limit, cudaMemcpyDeviceToHost);
+    fifo_file.open("output_to_java", std::ios::out | std::ios::binary);
+    fifo_file.write((char*)host_result, dst_limit/sizeof(char));
+    fifo_file.flush();
+    fifo_file.close();
+    unmapResource();
+//    if (isFirstDebug)
+//    {
+//        isFirstDebug = false;
+//        output_file.open("output.txt", std::ios::in | std::ios::binary);
+//        output_file.write((char*)host_result, dst_limit);
+//        output_file.close();
+//    }
+    //cudaFree(host_result);
+
     //decompress for debug
     //resizeDeviceMemory(dst_limit, 0, 0);
 //    if (isFirstCompress) {
@@ -188,7 +208,6 @@ void GraphicsResource::compress()
 //        output_decompress();
 //        isFirstCompress = false;
 //    }
-    unmapResource();
 }
 
 //new version
@@ -377,7 +396,20 @@ UNITY_INTERFACE_EXPORT void SendTextureIDToCuda(int texture_id, int width, int h
     if (graphicsResource == nullptr)
     {
         graphicsResource = new GraphicsResource(texture_id, width, height);
+        //GenerateNamedPipe();
     }
+}
+
+UNITY_INTERFACE_EXPORT void GenerateNamedPipe()
+{
+    const char* fifo_name = "output_to_java";
+    int res = mkfifo(fifo_name, 0777);
+    if (res != 0 && errno != 17)
+        return;
+    fifo_file.open(fifo_name, std::ios::out | std::ios::binary);
+    fifo_file << "test output";
+    fifo_file.flush();
+    fifo_file.close();
 }
 
 static void UNITY_INTERFACE_API OnRenderEvent(int eventID)
@@ -399,5 +431,6 @@ UNITY_INTERFACE_EXPORT void Dispose()
 {
     delete graphicsResource;
 	log_file.close();
+    fifo_file.close();
 }
 

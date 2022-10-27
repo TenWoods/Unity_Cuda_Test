@@ -19,6 +19,12 @@ public class CudaInterop : MonoBehaviour
     #endif
     private static extern void Dispose();
     #if UNITY_STANDALONE_LINUX
+    [DllImport("libCuda_Interop", EntryPoint = "GenerateNamedPipe")]
+    #elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+    [DllImport("Cuda_Interop", EntryPoint = "GenerateNamedPipe")]
+    #endif
+    private static extern void GenerateNamedPipe();
+    #if UNITY_STANDALONE_LINUX
     [DllImport("libCuda_Interop")]
     #elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
     [DllImport("Cuda_Interop")]
@@ -36,7 +42,6 @@ public class CudaInterop : MonoBehaviour
     private Camera _camera;
     bool isFirst = true;
 
-    // Start is called before the first frame update
     private void Start()
     {
         // #if UNITY_STANDALONE_LINUX
@@ -55,6 +60,7 @@ public class CudaInterop : MonoBehaviour
     private void OnEnable() 
     {
         RenderPipelineManager.endCameraRendering += PostRender;
+        GenerateNamedPipe();
     }
 
     private void OnDisable() 

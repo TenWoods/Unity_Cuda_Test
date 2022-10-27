@@ -270,8 +270,47 @@ CMakeFiles/Cuda_Interop.dir/cuda_interop.cu.o: ../cuda_interop.cu \
   ../PluginAPI/IUnityInterface.h \
   ../nvcomp/nvcomp.h \
   /usr/include/c++/10/iostream \
+  /usr/include/x86_64-linux-gnu/sys/stat.h \
+  /usr/include/x86_64-linux-gnu/bits/stat.h \
+  /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
+  /usr/include/x86_64-linux-gnu/bits/statx.h \
+  /usr/include/linux/stat.h \
+  /usr/include/linux/types.h \
+  /usr/include/x86_64-linux-gnu/asm/types.h \
+  /usr/include/asm-generic/types.h \
+  /usr/include/asm-generic/int-ll64.h \
+  /usr/include/x86_64-linux-gnu/asm/bitsperlong.h \
+  /usr/include/asm-generic/bitsperlong.h \
+  /usr/include/linux/posix_types.h \
+  /usr/include/linux/stddef.h \
+  /usr/include/x86_64-linux-gnu/asm/posix_types.h \
+  /usr/include/x86_64-linux-gnu/asm/posix_types_64.h \
+  /usr/include/asm-generic/posix_types.h \
+  /usr/include/x86_64-linux-gnu/bits/statx-generic.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_statx_timestamp.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_statx.h \
   ../nvcomp/nvcomp/cascaded.h
 
+
+/usr/include/x86_64-linux-gnu/bits/types/struct_statx_timestamp.h:
+
+/usr/include/x86_64-linux-gnu/bits/statx-generic.h:
+
+/usr/include/linux/stddef.h:
+
+/usr/include/linux/posix_types.h:
+
+/usr/include/asm-generic/bitsperlong.h:
+
+/usr/include/x86_64-linux-gnu/asm/types.h:
+
+/usr/include/linux/types.h:
+
+/usr/include/linux/stat.h:
+
+/usr/include/x86_64-linux-gnu/bits/stat.h:
+
+/usr/include/x86_64-linux-gnu/sys/stat.h:
 
 /usr/include/c++/10/iostream:
 
@@ -375,6 +414,8 @@ CMakeFiles/Cuda_Interop.dir/cuda_interop.cu.o: ../cuda_interop.cu \
 
 /usr/include/x86_64-linux-gnu/bits/timesize.h:
 
+/usr/include/x86_64-linux-gnu/bits/types/struct_statx.h:
+
 /usr/include/stdio.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/FILE.h:
@@ -411,11 +452,17 @@ CMakeFiles/Cuda_Interop.dir/cuda_interop.cu.o: ../cuda_interop.cu \
 
 /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h:
 
+/usr/include/asm-generic/types.h:
+
 /usr/include/c++/10/bits/stl_iterator_base_funcs.h:
 
 /usr/include/x86_64-linux-gnu/bits/floatn.h:
 
 /usr/include/x86_64-linux-gnu/c++/10/bits/c++config.h:
+
+/usr/include/x86_64-linux-gnu/asm/posix_types_64.h:
+
+/usr/include/x86_64-linux-gnu/bits/struct_stat.h:
 
 /usr/include/c++/10/backward/binders.h:
 
@@ -481,6 +528,8 @@ CMakeFiles/Cuda_Interop.dir/cuda_interop.cu.o: ../cuda_interop.cu \
 
 /usr/include/x86_64-linux-gnu/bits/types/time_t.h:
 
+/usr/include/x86_64-linux-gnu/asm/posix_types.h:
+
 /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
 
 /usr/include/surface_functions.h:
@@ -495,11 +544,15 @@ CMakeFiles/Cuda_Interop.dir/cuda_interop.cu.o: ../cuda_interop.cu \
 
 /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h:
 
+/usr/include/x86_64-linux-gnu/asm/bitsperlong.h:
+
 /usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
 
 /usr/include/x86_64-linux-gnu/sys/select.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
+
+/usr/include/x86_64-linux-gnu/bits/statx.h:
 
 /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
 
@@ -510,6 +563,8 @@ CMakeFiles/Cuda_Interop.dir/cuda_interop.cu.o: ../cuda_interop.cu \
 /usr/include/x86_64-linux-gnu/bits/stdio_lim.h:
 
 /usr/include/features.h:
+
+/usr/include/asm-generic/posix_types.h:
 
 /usr/include/x86_64-linux-gnu/sys/types.h:
 
@@ -596,6 +651,8 @@ CMakeFiles/Cuda_Interop.dir/cuda_interop.cu.o: ../cuda_interop.cu \
 /usr/include/x86_64-linux-gnu/bits/uintn-identity.h:
 
 /usr/include/texture_types.h:
+
+/usr/include/asm-generic/int-ll64.h:
 
 /usr/include/c++/10/bits/nested_exception.h:
 
