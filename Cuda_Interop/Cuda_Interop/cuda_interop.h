@@ -5,6 +5,7 @@
 
 #include <fstream>
 #include <string>
+#include <map>
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 #include "cuda_gl_interop.h"
@@ -17,14 +18,7 @@ std::ofstream  output_file;
 
 class GraphicsResource
 {
-public: 
-    int id;                               //texture id
-    cudaGraphicsResource_t resource;      //cuda resource
-    cudaArray_t array;
-    size_t width;                         //texture width
-    size_t height;                        //texture height
-    size_t data_length;                   //texture data length
-    void* data_pointer;                   //texture data pointer
+public:
     //data structure for compression
 //    void* temp_ptr;                       //temp pointer for nvcomp
 //    size_t temp_bytes;                    //temp data size
@@ -51,13 +45,12 @@ public:
     bool isRegistered;
     int count = 0;
     
-    GraphicsResource(int id, size_t width, size_t height) : id(id), width(width), height(height)
+    GraphicsResource(int id, int type, size_t width, size_t height, int processID, int cameraID) :
+    id(id), type((texture_type)type), width(width), height(height), processID(processID), cameraID(cameraID)
     {
-        resource = NULL;
-        data_pointer = NULL;
-        array = NULL;
-        isFirstDebug = true;
-        isFirstCompress = true;
+        resource = nullptr;
+        data_pointer = nullptr;
+        array = nullptr;
         data_length = width * height * sizeof(uchar4);
         //cudaStreamCreate(&stream);
         isMapped = false;
@@ -75,7 +68,7 @@ public:
 //        cudaFree(temp_ptr);
 //        cudaFree(device_compressed_ptrs);
 //        cudaFree(device_compressed_bytes);
-//        cudaFree(uncompressed_bytes);
+//         cudaFree(uncompressed_bytes);
 //        cudaFree(uncompressed_ptrs);
     }
 
@@ -86,31 +79,44 @@ public:
     void unregisterResource();
     void resizeDeviceMemory(size_t src_capacity, size_t workspace_capacity, size_t dst_capacity);
     void compress();
+    void sendData();
     //void decompress();
 
-private: 
-    bool isFirstDebug;
-    bool isFirstCompress;
-    void output_for_debug();
-    void output_decompress(/*size_t batch_size, const size_t* host_uncompressed_bytes*/);
+private:
+    int id;                               //texture id
+    cudaGraphicsResource_t resource;      //cuda resource
+    cudaArray_t array;
+    enum texture_type
+    {
+        Color = 0,
+        Depth = 1
+    } type;
+    size_t width;                         //texture width
+    size_t height;                        //texture height
+    int processID;                        //process belong to
+    int cameraID;                         //camera belong to
+    size_t data_length;                   //texture data length
+    void* data_pointer;                   //texture data pointer
+//    bool isFirstDebug;
+//    bool isFirstCompress;
+    //void output_for_debug();
+    //void output_decompress(/*size_t batch_size, const size_t* host_uncompressed_bytes*/);
     //void initialize_nvcomp();
 
 
 };
-GraphicsResource* graphicsResource = NULL;
 
-
+std::map<int, GraphicsResource*> resources;
 
 //Called by C#
 extern "C"
 {
-    UNITY_INTERFACE_EXPORT void SendTextureIDToCuda(int texture_id, int width, int height);
+    UNITY_INTERFACE_EXPORT void SendTextureIDToCuda(int texture_id, int type, int width, int height, int processID, int cameraID);
     UNITY_INTERFACE_EXPORT void Dispose();
-    UNITY_INTERFACE_EXPORT void GenerateNamedPipe();
-    UnityRenderingEvent UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetRenderEventFunc();
+    UNITY_INTERFACE_EXPORT void GenerateNamedPipe(int processID, int cameraID);
+    UnityRenderingEvent UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetPostRenderFunc();
+    static void UNITY_INTERFACE_API OnRenderEvent(int eventID);
 }
-
-static void UNITY_INTERFACE_API OnRenderEvent(int eventID);
 
 std::string nvcompGetStatusString(nvcompError_t status)
 {
