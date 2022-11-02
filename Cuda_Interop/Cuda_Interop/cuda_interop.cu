@@ -125,7 +125,6 @@ void GraphicsResource::compress()
     if (!log_file.is_open())
         log_file.open("error_log.txt");
     log_file << '[' << count++ << ']' << ' ';
-    std::cout << '[' << count << ']' << std::endl;
     src_limit = data_length;
     nvcompType_t type = NVCOMP_TYPE_UINT;
 
@@ -272,6 +271,7 @@ UNITY_INTERFACE_EXPORT void GenerateNamedPipe(int processID, int cameraID)
         return;
     }
     //create depth fifo file
+
     fifo_name = "output_to_java_depth_" + std::to_string(processID) + std::to_string(cameraID);
     res = mkfifo(fifo_name.c_str(), 0777);
     if (res != 0 && errno != 17)

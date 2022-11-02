@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject[] objects;
     private List<Camera> cameras;
-    private int processID;
+    private int processID = -1;
     
     public GameObject cameraPrefab;
     
@@ -17,9 +17,9 @@ public class GameManager : MonoBehaviour
         //init scene
         string[] args = System.Environment.GetCommandLineArgs();
         //set content server target
-        processID = int.Parse(args[0]);
+        processID = int.Parse(args[1]);
+        print(processID);
         objects[processID].SetActive(true);
-        Debug.Log(processID);
         cameras = new List<Camera>();
         InitCamera();
     }
@@ -31,5 +31,6 @@ public class GameManager : MonoBehaviour
         ContentCamera cc = subCamera.GetComponent<ContentCamera>();
         cc.CameraID = 0;
         cc.ProcessID = processID;
+        cc.InitPipe();
     }
 }

@@ -16,9 +16,7 @@ public class ContentCamera : MonoBehaviour
     [SerializeField]
     private Material depthMaterial;
     private Camera _camera;
-    private const int COLOR_EVENT = 0x0001;
-    private const int DEPTH_EVENT = 0x0002;
-    
+
     public int ProcessID
     {
         //get => _processID;
@@ -37,7 +35,7 @@ public class ContentCamera : MonoBehaviour
     private static extern void Dispose();
     [DllImport("libCuda_Interop", EntryPoint = "GenerateNamedPipe")]
     private static extern void GenerateNamedPipe(int processID, int cameraID);
-    [DllImport("libCudaInterop")]
+    [DllImport("libCuda_Interop")]
     private static extern IntPtr GetPostRenderFunc();
 
     private void Start()
@@ -82,7 +80,7 @@ public class ContentCamera : MonoBehaviour
         //set color texture ID
         SendTextureIDToCuda(colorTextureID, 0, colorTexture.width, colorTexture.height, _processID, _cameraID);
         //set depth texture ID
-        SendTextureIDToCuda(depthTextureID, 0, depthTexture.width, depthTexture.height, _processID, _cameraID);
+        SendTextureIDToCuda(depthTextureID, 1, depthTexture.width, depthTexture.height, _processID, _cameraID);
         //register callback for color and depth
         GL.IssuePluginEvent(GetPostRenderFunc(), colorTextureID);
         GL.IssuePluginEvent(GetPostRenderFunc(), depthTextureID);
